@@ -24,6 +24,8 @@ model answer {
 model app_user {
   id         Int        @id @default(autoincrement())
   username   String     @unique
+  email      String     @unique
+  password   String
   role       String     @default("aluno")
   created_at DateTime   @default(now()) @db.Timestamptz(6)
   answer     answer[]
@@ -58,21 +60,14 @@ model topic {
   other_topic topic[]    @relation("topicTotopic")
 }
 
-enum TargetType {
-  question
-  answer
-}
-
 model vote {
-  id          Int        @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   user_id     Int
-  target_type TargetType
+  target_type String
   target_id   Int
-  vote_type   Int        @db.SmallInt
-  created_at  DateTime   @default(now()) @db.Timestamptz(6)
-
-  app_user    app_user   @relation(fields: [user_id], references: [id])
+  vote_type   Int      @db.SmallInt
+  created_at  DateTime @default(now()) @db.Timestamptz(6)
+  app_user    app_user @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@unique([user_id, target_type, target_id])
 }
-
