@@ -1,6 +1,12 @@
 import Fastify from 'fastify';
 import { userRoutes } from './modules/user/routes.js';
-import { serializerCompiler, validatorCompiler, ZodTypeProvider } from 'fastify-type-provider-zod';
+import {
+	serializerCompiler,
+	validatorCompiler,
+	ZodTypeProvider,
+} from 'fastify-type-provider-zod';
+
+import 'dotenv/config';
 
 const app = Fastify({ logger: true }).withTypeProvider<ZodTypeProvider>();
 app.setValidatorCompiler(validatorCompiler);
