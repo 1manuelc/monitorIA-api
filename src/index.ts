@@ -1,5 +1,5 @@
 import Fastify, { FastifyReply, FastifyRequest } from 'fastify';
-import { userRoutes } from './modules/user/routes.js';
+import { userRoutes } from './modules/users/routes.js';
 import {
 	serializerCompiler,
 	validatorCompiler,
