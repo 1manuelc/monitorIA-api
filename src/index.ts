@@ -10,6 +10,7 @@ import 'dotenv/config';
 import fjwt, { FastifyJWT } from '@fastify/jwt';
 import fCookie from '@fastify/cookie';
 import { testRoutes } from './modules/test-routes/routes.js';
+import { topicRoutes } from './modules/topics/routes.js';
 
 const app = Fastify({ logger: true }).withTypeProvider<ZodTypeProvider>();
 
@@ -44,6 +45,7 @@ app.setSerializerCompiler(serializerCompiler);
 
 app.register(testRoutes, { prefix: 'api/' });
 app.register(userRoutes, { prefix: 'api/users' });
+app.register(topicRoutes, { prefix: 'api/topics' });
 
 app.listen({ port: 3000 }, (err, address) => {
 	if (err) {
