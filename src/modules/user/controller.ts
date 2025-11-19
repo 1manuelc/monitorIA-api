@@ -87,7 +87,7 @@ export async function getAllUsers(req: FastifyRequest, reply: FastifyReply) {
 			},
 		});
 
-		if (!users) {
+		if (!users || users.length === 0) {
 			return reply.code(401).send({
 				message: 'Sem usuários para mostrar',
 			});
