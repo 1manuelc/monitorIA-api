@@ -35,8 +35,6 @@ export async function createTopic(
 			},
 		});
 
-		console.log(topic);
-
 		return reply.code(201).send({
 			id: topic.id,
 			name: topic.name,
@@ -99,21 +97,25 @@ export async function patchTopic(
 	const { name, description, parent_id } = req.body;
 	const { id } = req.params;
 
-	const topic = await prisma.topic.findUnique({
-		where: { id: id },
-	});
-
-	if (!topic) {
-		return reply.code(401).send({
-			message: `Tópico de id ${id} não existe`,
+	try {
+		const topic = await prisma.topic.findUnique({
+			where: { id: id },
 		});
-	}
 
-	const edited = await prisma.topic.update({
-		data: { name, description, parent_id },
-		where: { id: id },
-	});
-	return reply.code(200).send(edited);
+		if (!topic) {
+			return reply.code(401).send({
+				message: `Tópico de id ${id} não existe`,
+			});
+		}
+
+		const edited = await prisma.topic.update({
+			data: { name, description, parent_id },
+			where: { id: id },
+		});
+		return reply.code(200).send(edited);
+	} catch (e) {
+		return reply.code(500).send(e);
+	}
 }
 
 export async function deleteTopic(
@@ -124,16 +126,22 @@ export async function deleteTopic(
 ) {
 	const { id } = req.params;
 
-	const topic = await prisma.topic.findUnique({
-		where: { id: id },
-	});
-
-	if (!topic) {
-		return reply.code(401).send({
-			message: `Tópico de id ${id} não existe`,
+	try {
+		const topic = await prisma.topic.findUnique({
+			where: { id: id },
 		});
-	}
 
-	const deleted = await prisma.topic.delete({ where: { id: id } });
-	return reply.code(200).send({ msg: `Tópico de id ${deleted.id} deletado` });
+		if (!topic) {
+			return reply.code(401).send({
+				message: `Tópico de id ${id} não existe`,
+			});
+		}
+
+		const deleted = await prisma.topic.delete({ where: { id: id } });
+		return reply
+			.code(200)
+			.send({ msg: `Tópico de id ${deleted.id} deletado` });
+	} catch (e) {
+		return reply.code(500).send(e);
+	}
 }
