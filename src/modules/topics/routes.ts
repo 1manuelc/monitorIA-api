@@ -3,7 +3,6 @@ import {
 	createTopicResponseSchema,
 	createTopicSchema,
 	deleteTopicResponseSchema,
-	deleteTopicSchema,
 	editTopicResponseSchema,
 	editTopicSchema,
 	getTopicByIdSchema,
@@ -43,10 +42,11 @@ export async function topicRoutes(app: FastifyInstance) {
 	);
 
 	app.patch(
-		'/',
+		'/:id',
 		{
 			preHandler: [app.authenticate],
 			schema: {
+				params: getTopicByIdSchema,
 				body: editTopicSchema,
 				response: { 201: editTopicResponseSchema },
 			},
@@ -55,11 +55,11 @@ export async function topicRoutes(app: FastifyInstance) {
 	);
 
 	app.delete(
-		'/',
+		'/:id',
 		{
 			preHandler: [app.authenticate],
 			schema: {
-				body: deleteTopicSchema,
+				params: getTopicByIdSchema,
 				response: { 200: deleteTopicResponseSchema },
 			},
 		},

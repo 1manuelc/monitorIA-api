@@ -1,7 +1,6 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import {
 	CreateTopicInput,
-	DeleteTopicInput,
 	EditTopicInput,
 	GetTopicByIdInput,
 } from './schemas.js';
@@ -93,10 +92,13 @@ export async function getTopic(
 export async function patchTopic(
 	req: FastifyRequest<{
 		Body: EditTopicInput;
+		Params: GetTopicByIdInput;
 	}>,
 	reply: FastifyReply,
 ) {
-	const { id, name, description, parent_id } = req.body;
+	const { name, description, parent_id } = req.body;
+	const { id } = req.params;
+
 	const topic = await prisma.topic.findUnique({
 		where: { id: id },
 	});
@@ -116,11 +118,12 @@ export async function patchTopic(
 
 export async function deleteTopic(
 	req: FastifyRequest<{
-		Body: DeleteTopicInput;
+		Params: GetTopicByIdInput;
 	}>,
 	reply: FastifyReply,
 ) {
-	const { id } = req.body;
+	const { id } = req.params;
+
 	const topic = await prisma.topic.findUnique({
 		where: { id: id },
 	});

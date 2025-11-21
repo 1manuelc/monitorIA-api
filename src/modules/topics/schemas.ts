@@ -21,7 +21,6 @@ export const createTopicResponseSchema = z.object({
 export type CreateTopicResponse = z.infer<typeof createTopicResponseSchema>;
 
 export const editTopicSchema = z.object({
-	id: z.number(),
 	name: z.string().optional(),
 	parent_id: z.int().optional(),
 	description: z.string().optional(),
@@ -35,11 +34,6 @@ export const editTopicResponseSchema = z.object({
 	description: z.string().nullable().optional(),
 });
 export type EditTopicResponse = z.infer<typeof editTopicResponseSchema>;
-
-export const deleteTopicSchema = z.object({
-	id: z.number(),
-});
-export type DeleteTopicInput = z.infer<typeof deleteTopicSchema>;
 
 export const deleteTopicResponseSchema = z.object({
 	msg: z.string(),
