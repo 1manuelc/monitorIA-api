@@ -134,6 +134,17 @@ Execute as migrações do Prisma para criar as tabelas:
 npx prisma migrate dev --name init
 ```
 
+Alternativamente, você pode inicializar o banco executando o script `db.sql` presente na raiz do projeto. Esse script contém o schema inicial e dados de exemplo — use apenas um dos métodos (migrações ou `db.sql`) para evitar conflitos.
+
+Exemplos de uso:
+
+```bash
+# executando com uma connection string (URI)
+psql "postgresql://usuario:senha@localhost:5432/monitoria" -f db.sql
+```
+
+Observação: o comando `psql` deve estar instalado no seu sistema e a string de conexão deve conter credenciais válidas.
+
 ### 5. Executar em modo desenvolvimento
 
 ```bash
