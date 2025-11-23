@@ -15,6 +15,11 @@ import { questionRoutes } from './modules/questions/routes.js';
 import { answerRoutes } from './modules/answers/routes.js';
 import { voteRoutes } from './modules/votes/routes.js';
 
+// 🔥 IMPORTS DO SWAGGER + ZOD
+import swagger from '@fastify/swagger';
+import swaggerUI from '@fastify/swagger-ui';
+import { jsonSchemaTransform } from 'fastify-type-provider-zod';
+
 const app = Fastify({
 	logger: {
 		level: process.env.LOGGER_LEVEL ?? undefined,
@@ -22,17 +27,33 @@ const app = Fastify({
 	},
 }).withTypeProvider<ZodTypeProvider>();
 
+app.register(swagger, {
+	openapi: {
+		info: {
+			title: 'MonitorIA API',
+			version: '1.0.0',
+		},
+	},
+	transform: jsonSchemaTransform, // ⭐ transforma Zod → JSON Schema
+});
+app.register(swaggerUI, {
+	routePrefix: '/docs',
+});
+
 app.register(fjwt, {
 	secret: process.env.JWT_SECRET || 'super-secret',
 });
+
 app.addHook('preHandler', (req, res, next) => {
 	req.jwt = app.jwt;
 	return next();
 });
+
 app.register(fCookie, {
 	secret: process.env.COOKIE_SECRET || 'cookie-super-secret',
 	hook: 'preHandler',
 });
+
 app.decorate(
 	'authenticate',
 	async (req: FastifyRequest, reply: FastifyReply) => {
@@ -51,7 +72,7 @@ app.decorate(
 app.setValidatorCompiler(validatorCompiler);
 app.setSerializerCompiler(serializerCompiler);
 
-app.register(testRoutes, { prefix: '/api/' });
+app.register(testRoutes, { prefix: '/api' });
 app.register(userRoutes, { prefix: '/api/users' });
 app.register(topicRoutes, { prefix: '/api/topics' });
 app.register(questionRoutes, { prefix: '/api/questions' });
@@ -64,5 +85,5 @@ app.listen({ port: 3000 }, (err, address) => {
 		process.exit(1);
 	}
 	console.log(`🤖 MonitorIA-API rodando em ${address}/api/`);
-	app.log.info(`server listening on ${address}`);
+	console.log(`📘 Swagger: ${address}/docs`);
 });
