@@ -5,6 +5,7 @@ import {
 	getAllAnswersResponseSchema,
 	getAnswersByQuestionIdSchema,
 	getOneAnswerByQuestionIdSchema,
+	patchAnswerSchema,
 } from './schemas.js';
 import {
 	createAnswer,
@@ -73,6 +74,7 @@ export async function answerRoutes(app: FastifyInstance) {
 				tags: ['Respostas'],
 				description: 'Edita uma resposta específica de uma pergunta',
 				params: getOneAnswerByQuestionIdSchema,
+				body: patchAnswerSchema,
 				response: {
 					200: answerSchema,
 					400: requestErrorMessageSchema,
