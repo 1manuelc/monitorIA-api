@@ -18,6 +18,7 @@ import { voteRoutes } from './modules/votes/routes.js';
 import swagger from '@fastify/swagger';
 import swaggerUI from '@fastify/swagger-ui';
 import { jsonSchemaTransform } from 'fastify-type-provider-zod';
+import { authRoutes } from './modules/auth/routes.js';
 
 const app = Fastify({
 	logger: {
@@ -72,6 +73,7 @@ app.setValidatorCompiler(validatorCompiler);
 app.setSerializerCompiler(serializerCompiler);
 
 app.register(testRoutes, { prefix: '/api' });
+app.register(authRoutes, { prefix: '/api/auth' });
 app.register(userRoutes, { prefix: '/api/users' });
 app.register(topicRoutes, { prefix: '/api/topics' });
 app.register(questionRoutes, { prefix: '/api/questions' });

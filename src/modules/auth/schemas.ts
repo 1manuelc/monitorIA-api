@@ -1,0 +1,28 @@
+import z from 'zod';
+
+export const createUserSchema = z.object({
+	email: z.email(),
+	password: z.string().min(8),
+	username: z.string(),
+});
+export type CreateUserInput = z.infer<typeof createUserSchema>;
+
+export const createUserResponseSchema = z.object({
+	id: z.number(),
+	email: z.string(),
+	username: z.string(),
+	created_at: z.date(),
+	role: z.string(),
+});
+export type CreateUserResponse = z.infer<typeof createUserResponseSchema>;
+
+export const loginSchema = z.object({
+	email: z.email({ message: 'Email é necessario' }),
+	password: z.string().min(8),
+});
+export type LoginUserInput = z.infer<typeof loginSchema>;
+
+export const loginResponseSchema = z.object({
+	accessToken: z.string(),
+});
+export type LoginResponse = z.infer<typeof loginResponseSchema>;
