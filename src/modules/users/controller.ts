@@ -1,80 +1,8 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
-import bcrypt from 'bcrypt';
+
 import { prisma } from '../../utils/prisma.js';
-import { CreateUserInput, LoginUserInput } from './schemas.js';
-
-const SALT_ROUNDS = 12;
-
-export async function createUser(
-	req: FastifyRequest<{
-		Body: CreateUserInput;
-	}>,
-	reply: FastifyReply,
-) {
-	const { password, email, username } = req.body;
-
-	const user = await prisma.app_user.findUnique({
-		where: { email: email },
-	});
-	if (user) {
-		return reply.code(400).send({
-			message: 'Ja existe um usuario registrado com este e-mail',
-		});
-	}
-
-	try {
-		const hash = await bcrypt.hash(password, SALT_ROUNDS);
-		const user = await prisma.app_user.create({
-			data: {
-				password: hash,
-				email,
-				username,
-			},
-		});
-
-		return reply
-			.code(201)
-			.send({ id: user.id, email: user.email, username: user.username });
-	} catch (e) {
-		return reply.code(500).send(e);
-	}
-}
-
-export async function login(
-	req: FastifyRequest<{
-		Body: LoginUserInput;
-	}>,
-	reply: FastifyReply,
-) {
-	const { email, password } = req.body;
-	const user = await prisma.app_user.findUnique({ where: { email: email } });
-
-	const isMatch = user && (await bcrypt.compare(password, user.password));
-	if (!user || !isMatch) {
-		return reply.code(404).send({
-			message: 'E-mail ou senha invalidos',
-		});
-	}
-
-	const payload = {
-		id: user.id,
-		email: user.email,
-		username: user.username,
-	};
-	const token = req.jwt.sign(payload);
-	reply.setCookie('access_token', token, {
-		path: '/',
-		httpOnly: true,
-		secure: true,
-	});
-
-	return { accessToken: token };
-}
-
-export async function logout(req: FastifyRequest, reply: FastifyReply) {
-	reply.clearCookie('access_token');
-	return reply.status(200).send({ message: 'Logout bem sucedido' });
-}
+import { GetOneUserInput, PatchUserInput } from './schemas.js';
+import bcrypt from 'bcrypt';
 
 export async function getAllUsers(req: FastifyRequest, reply: FastifyReply) {
 	try {
@@ -96,5 +24,87 @@ export async function getAllUsers(req: FastifyRequest, reply: FastifyReply) {
 		return reply.code(200).send(users);
 	} catch (e) {
 		return reply.code(500).send(e);
+	}
+}
+
+export async function getUser(
+	req: FastifyRequest<{ Params: GetOneUserInput }>,
+	reply: FastifyReply,
+) {
+	const { id } = req.params;
+
+	try {
+		const user = await prisma.app_user.findUnique({
+			where: { id: id },
+		});
+
+		if (!user) {
+			return reply.code(404).send({
+				message: `Usuário de id ${id} não existe`,
+			});
+		}
+
+		return reply.code(200).send(user);
+	} catch (e) {
+		return reply.code(500).send(e);
+	}
+}
+
+export async function patchUser(
+	req: FastifyRequest<{
+		Body: PatchUserInput;
+		Params: GetOneUserInput;
+	}>,
+	reply: FastifyReply,
+) {
+	const { username, role, email } = req.body;
+	const { id } = req.params;
+
+	try {
+		const user = await prisma.app_user.findUnique({
+			where: { id: id },
+		});
+
+		if (!user) {
+			return reply.code(404).send({
+				message: `Usuário de id ${id} não existe`,
+			});
+		}
+
+		const edited = await prisma.app_user.update({
+			data: { username, role, email },
+			where: { id: id },
+		});
+		return reply.code(200).send(edited);
+	} catch (e) {
+		return reply.code(500).send(e);
+	}
+}
+
+export async function deleteUser(
+	req: FastifyRequest<{ Params: GetOneUserInput }>,
+	reply: FastifyReply,
+) {
+	const { id } = req.params;
+
+	try {
+		const user = await prisma.app_user.findUnique({
+			where: { id },
+		});
+
+		if (!user) {
+			return reply.code(404).send({
+				message: `Usuário de id ${id} não existe`,
+			});
+		}
+
+		const deleted = await prisma.vote.delete({
+			where: { id },
+		});
+		return reply
+			.code(200)
+			.send({ message: `Usuário de id ${deleted.id} deletado` });
+	} catch (e) {
+		return reply.status(500).send(e);
 	}
 }

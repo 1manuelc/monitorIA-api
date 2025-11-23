@@ -1,12 +1,11 @@
-import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
+import { FastifyInstance } from 'fastify';
 import {
-	createUserResponseSchema,
-	createUserSchema,
+	getOneUserSchema,
 	getUsersSchema,
-	loginResponseSchema,
-	loginSchema,
+	patchUserSchema,
+	userSchema,
 } from './schemas.js';
-import { createUser, getAllUsers, login, logout } from './controller.js';
+import { getAllUsers, getUser, patchUser } from './controller.js';
 import {
 	deleteMessageSchema,
 	requestErrorMessageSchema,
@@ -30,51 +29,59 @@ export async function userRoutes(app: FastifyInstance) {
 		getAllUsers,
 	);
 
-	app.post(
-		'/register',
+	app.get(
+		'/:id',
 		{
+			preHandler: [app.authenticate],
 			schema: {
-				tags: ['Autenticação'],
-				description: 'Registra um usuário',
-				body: createUserSchema,
-				response: {
-					201: createUserResponseSchema,
-					400: requestErrorMessageSchema,
-				},
-			},
-		},
-		createUser,
-	);
-
-	app.post(
-		'/login',
-		{
-			schema: {
-				tags: ['Autenticação'],
+				tags: ['Usuários'],
 				description:
-					'Autentica um usuário inserindo um cookie na resposta',
-				body: loginSchema,
+					'Obtém um usuário específico (rota protegida com autenticação)',
+				params: getOneUserSchema,
 				response: {
-					201: loginResponseSchema,
+					200: userSchema,
 					404: requestErrorMessageSchema,
 				},
 			},
 		},
-		login,
+		getUser,
 	);
 
-	app.delete(
-		'/logout',
+	app.patch(
+		'/:id',
 		{
 			preHandler: [app.authenticate],
 			schema: {
-				tags: ['Autenticação'],
+				tags: ['Usuários'],
 				description:
-					'Faz logout do usuário removendo o token de acesso dos cookies',
-				response: { 200: deleteMessageSchema },
+					'Edita um usuário específico (rota protegida com autenticação)',
+				params: getOneUserSchema,
+				body: patchUserSchema,
+				response: {
+					200: userSchema,
+					404: requestErrorMessageSchema,
+				},
 			},
 		},
-		logout,
+		patchUser,
+	);
+
+	app.delete(
+		'/:id',
+		{
+			preHandler: [app.authenticate],
+			schema: {
+				tags: ['Usuários'],
+				description:
+					'Deleta um usuário específico (rota protegida com autenticação)',
+				params: getOneUserSchema,
+				response: {
+					200: deleteMessageSchema,
+					404: requestErrorMessageSchema,
+				},
+			},
+		},
+		patchUser,
 	);
 
 	app.log.info('user routes registered');

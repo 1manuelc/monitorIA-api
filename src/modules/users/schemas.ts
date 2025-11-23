@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-const userSchema = z.object({
+export const userSchema = z.object({
 	id: z.number(),
 	username: z.string(),
 	email: z.string(),
@@ -9,27 +9,14 @@ const userSchema = z.object({
 
 export const getUsersSchema = z.array(userSchema);
 
-export const createUserSchema = z.object({
-	email: z.email(),
-	password: z.string().min(8),
-	username: z.string(),
+export const getOneUserSchema = z.object({
+	id: z.string().transform((s) => Number(s)),
 });
-export type CreateUserInput = z.infer<typeof createUserSchema>;
+export type GetOneUserInput = z.infer<typeof getOneUserSchema>;
 
-export const createUserResponseSchema = z.object({
-	id: z.string(),
-	email: z.string(),
-	username: z.string(),
+export const patchUserSchema = z.object({
+	username: z.string().optional(),
+	email: z.string().optional(),
+	role: z.string().optional(),
 });
-export type CreateUserResponse = z.infer<typeof createUserResponseSchema>;
-
-export const loginSchema = z.object({
-	email: z.email({ message: 'Email é necessario' }),
-	password: z.string().min(8),
-});
-export type LoginUserInput = z.infer<typeof loginSchema>;
-
-export const loginResponseSchema = z.object({
-	accessToken: z.string(),
-});
-export type LoginResponse = z.infer<typeof loginResponseSchema>;
+export type PatchUserInput = z.infer<typeof patchUserSchema>;
