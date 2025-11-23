@@ -10,6 +10,20 @@ export const getVotesByTargetSchema = z.object({
 });
 export type GetVotesByTargetInput = z.infer<typeof getVotesByTargetSchema>;
 
+export const getVotesByTargetResponse = z.union([
+	z.object({
+		id: z.number(),
+		target_id: z.number(),
+		target_type: z.string(),
+		user_id: z.number(),
+		vote_type: z.number(),
+		created_at: z.date(),
+	}),
+	z.object({
+		value: z.number(),
+	}),
+]);
+
 export const createVoteSchema = z.object({
 	user_id: z.number(),
 	target_id: z.number(),
@@ -17,6 +31,15 @@ export const createVoteSchema = z.object({
 	vote_type: z.union([z.literal(1), z.literal(-1)]),
 });
 export type CreateVoteInput = z.infer<typeof createVoteSchema>;
+
+export const createVoteResponseSchema = z.object({
+	id: z.number(),
+	target_id: z.number(),
+	target_type: z.string(),
+	user_id: z.number(),
+	vote_type: z.number(),
+	created_at: z.date(),
+});
 
 export const patchVoteBodySchema = z.object({
 	vote_type: z.union([z.literal(1), z.literal(-1)]),
