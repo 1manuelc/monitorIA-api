@@ -1,5 +1,21 @@
 import z from 'zod';
 
+const topicSchema = z.object({
+	id: z.number(),
+	name: z.string(),
+	parent_id: z.number().nullable(),
+	description: z.string().nullable(),
+	other_topic: z.array(
+		z.object({
+			id: z.number(),
+			name: z.string(),
+			parent_id: z.number().nullable(),
+			description: z.string().nullable(),
+		}),
+	),
+});
+export const getAllTopicsResponseSchema = z.array(topicSchema);
+
 export const getTopicByIdSchema = z.object({
 	id: z.string().transform((s) => Number(s)),
 });
