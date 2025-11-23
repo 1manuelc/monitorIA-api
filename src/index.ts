@@ -15,7 +15,6 @@ import { questionRoutes } from './modules/questions/routes.js';
 import { answerRoutes } from './modules/answers/routes.js';
 import { voteRoutes } from './modules/votes/routes.js';
 
-// 🔥 IMPORTS DO SWAGGER + ZOD
 import swagger from '@fastify/swagger';
 import swaggerUI from '@fastify/swagger-ui';
 import { jsonSchemaTransform } from 'fastify-type-provider-zod';
