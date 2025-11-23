@@ -86,6 +86,8 @@ export async function questionRoutes(app: FastifyInstance) {
 		'/:id',
 		{
 			schema: {
+				tags: ['Perguntas'],
+				description: 'Deleta uma pergunta específica',
 				params: getQuestionByIdSchema,
 				response: {
 					200: deleteMessageSchema,
