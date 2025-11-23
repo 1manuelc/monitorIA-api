@@ -24,7 +24,6 @@ export async function userRoutes(app: FastifyInstance) {
 				response: {
 					200: getUsersSchema,
 					404: requestErrorMessageSchema,
-					500: requestErrorMessageSchema,
 				},
 			},
 		},
@@ -38,7 +37,10 @@ export async function userRoutes(app: FastifyInstance) {
 				tags: ['Autenticação'],
 				description: 'Registra um usuário',
 				body: createUserSchema,
-				response: { 201: createUserResponseSchema },
+				response: {
+					201: createUserResponseSchema,
+					400: requestErrorMessageSchema,
+				},
 			},
 		},
 		createUser,
@@ -52,7 +54,10 @@ export async function userRoutes(app: FastifyInstance) {
 				description:
 					'Autentica um usuário inserindo um cookie na resposta',
 				body: loginSchema,
-				response: { 201: loginResponseSchema },
+				response: {
+					201: loginResponseSchema,
+					404: requestErrorMessageSchema,
+				},
 			},
 		},
 		login,
