@@ -1,6 +1,8 @@
 import { FastifyInstance } from 'fastify';
 import {
+	answerSchema,
 	createAnswerSchema,
+	getAllAnswersResponseSchema,
 	getAnswersByQuestionIdSchema,
 	getOneAnswerByQuestionIdSchema,
 } from './schemas.js';
@@ -11,6 +13,10 @@ import {
 	getAnswer,
 	patchAnswer,
 } from './controller.js';
+import {
+	deleteMessageSchema,
+	requestErrorMessageSchema,
+} from '../../utils/default-schemas.js';
 
 export async function answerRoutes(app: FastifyInstance) {
 	// lembrar de :questionId na rota base
@@ -18,8 +24,11 @@ export async function answerRoutes(app: FastifyInstance) {
 		'/',
 		{
 			schema: {
+				tags: ['Respostas'],
+				description: 'Cria uma resposta para uma pergunta',
 				body: createAnswerSchema,
 				params: getAnswersByQuestionIdSchema,
+				response: { 201: answerSchema },
 			},
 		},
 		createAnswer,
@@ -27,20 +36,48 @@ export async function answerRoutes(app: FastifyInstance) {
 
 	app.get(
 		'/',
-		{ schema: { params: getAnswersByQuestionIdSchema } },
+		{
+			schema: {
+				tags: ['Respostas'],
+				description: 'Obtém todas as resposta de uma pergunta',
+				params: getAnswersByQuestionIdSchema,
+				response: {
+					200: getAllAnswersResponseSchema,
+					404: requestErrorMessageSchema,
+				},
+			},
+		},
 		getAllAnswers,
 	);
 
 	app.get(
 		'/:answerId',
-		{ schema: { params: getOneAnswerByQuestionIdSchema } },
+		{
+			schema: {
+				tags: ['Respostas'],
+				description: 'Obtém uma resposta específica de uma pergunta',
+				params: getOneAnswerByQuestionIdSchema,
+				response: {
+					200: answerSchema,
+					400: requestErrorMessageSchema,
+				},
+			},
+		},
 		getAnswer,
 	);
 
 	app.patch(
 		'/:answerId',
 		{
-			schema: { params: getOneAnswerByQuestionIdSchema },
+			schema: {
+				tags: ['Respostas'],
+				description: 'Edita uma resposta específica de uma pergunta',
+				params: getOneAnswerByQuestionIdSchema,
+				response: {
+					200: answerSchema,
+					400: requestErrorMessageSchema,
+				},
+			},
 		},
 		patchAnswer,
 	);
@@ -48,7 +85,15 @@ export async function answerRoutes(app: FastifyInstance) {
 	app.delete(
 		'/:answerId',
 		{
-			schema: { params: getOneAnswerByQuestionIdSchema },
+			schema: {
+				tags: ['Respostas'],
+				description: 'Deleta uma resposta específica de uma pergunta',
+				params: getOneAnswerByQuestionIdSchema,
+				response: {
+					200: deleteMessageSchema,
+					400: requestErrorMessageSchema,
+				},
+			},
 		},
 		deleteAnswer,
 	);

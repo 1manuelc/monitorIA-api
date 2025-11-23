@@ -19,7 +19,7 @@ export async function getAllAnswers(
 		});
 
 		if (!answersByQuestion || answersByQuestion.length === 0) {
-			return reply.code(401).send({
+			return reply.code(404).send({
 				message: 'Sem respostas para mostrar',
 			});
 		}
@@ -42,7 +42,7 @@ export async function getAnswer(
 		});
 
 		if (!answer) {
-			return reply.code(401).send({
+			return reply.code(400).send({
 				message: `Resposta de id ${answerId} não existe`,
 			});
 		}
