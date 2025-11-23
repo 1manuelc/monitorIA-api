@@ -27,7 +27,7 @@ export type GetOneAnswerByQuestionIdInput = z.infer<
 >;
 
 export const createAnswerSchema = z.object({
-	user_id: z.number(),
+	user_id: z.number().nullable(),
 	body: z.string(),
 });
 export type CreateAnswerInput = z.infer<typeof createAnswerSchema>;
