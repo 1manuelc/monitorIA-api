@@ -13,6 +13,7 @@ import { testRoutes } from './modules/test-routes/routes.js';
 import { topicRoutes } from './modules/topics/routes.js';
 import { questionRoutes } from './modules/questions/routes.js';
 import { answerRoutes } from './modules/answers/routes.js';
+import { voteRoutes } from './modules/votes/routes.js';
 
 const app = Fastify({
 	logger: {
@@ -50,10 +51,11 @@ app.decorate(
 app.setValidatorCompiler(validatorCompiler);
 app.setSerializerCompiler(serializerCompiler);
 
-app.register(testRoutes, { prefix: 'api/' });
-app.register(userRoutes, { prefix: 'api/users' });
-app.register(topicRoutes, { prefix: 'api/topics' });
-app.register(questionRoutes, { prefix: 'api/questions' });
+app.register(testRoutes, { prefix: '/api/' });
+app.register(userRoutes, { prefix: '/api/users' });
+app.register(topicRoutes, { prefix: '/api/topics' });
+app.register(questionRoutes, { prefix: '/api/questions' });
+app.register(voteRoutes, { prefix: '/api/votes' });
 app.register(answerRoutes, { prefix: '/api/questions/:questionId/answers' });
 
 app.listen({ port: 3000 }, (err, address) => {
