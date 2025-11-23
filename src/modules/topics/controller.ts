@@ -19,7 +19,7 @@ export async function createTopic(
 	});
 
 	if (sameNameTopic) {
-		return reply.code(401).send({
+		return reply.code(400).send({
 			message: 'Ja existe um topico registrado com este nome',
 		});
 	}
@@ -53,7 +53,7 @@ export async function getAllTopics(req: FastifyRequest, reply: FastifyReply) {
 		});
 
 		if (!topics || topics.length === 0) {
-			return reply.code(401).send({
+			return reply.code(404).send({
 				message: 'Sem tópicos para mostrar',
 			});
 		}
@@ -76,7 +76,7 @@ export async function getTopic(
 		});
 
 		if (!topic) {
-			return reply.code(401).send({
+			return reply.code(404).send({
 				message: `Tópico de id ${id} não existe`,
 			});
 		}
@@ -103,7 +103,7 @@ export async function patchTopic(
 		});
 
 		if (!topic) {
-			return reply.code(401).send({
+			return reply.code(404).send({
 				message: `Tópico de id ${id} não existe`,
 			});
 		}
@@ -132,7 +132,7 @@ export async function deleteTopic(
 		});
 
 		if (!topic) {
-			return reply.code(401).send({
+			return reply.code(404).send({
 				message: `Tópico de id ${id} não existe`,
 			});
 		}
@@ -140,7 +140,7 @@ export async function deleteTopic(
 		const deleted = await prisma.topic.delete({ where: { id: id } });
 		return reply
 			.code(200)
-			.send({ msg: `Tópico de id ${deleted.id} deletado` });
+			.send({ message: `Tópico de id ${deleted.id} deletado` });
 	} catch (e) {
 		return reply.code(500).send(e);
 	}

@@ -17,7 +17,7 @@ export async function createUser(
 		where: { email: email },
 	});
 	if (user) {
-		return reply.code(401).send({
+		return reply.code(400).send({
 			message: 'Ja existe um usuario registrado com este e-mail',
 		});
 	}
@@ -51,7 +51,7 @@ export async function login(
 
 	const isMatch = user && (await bcrypt.compare(password, user.password));
 	if (!user || !isMatch) {
-		return reply.code(401).send({
+		return reply.code(404).send({
 			message: 'E-mail ou senha invalidos',
 		});
 	}
@@ -88,7 +88,7 @@ export async function getAllUsers(req: FastifyRequest, reply: FastifyReply) {
 		});
 
 		if (!users || users.length === 0) {
-			return reply.code(401).send({
+			return reply.code(404).send({
 				message: 'Sem usuários para mostrar',
 			});
 		}

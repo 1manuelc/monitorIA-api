@@ -47,8 +47,8 @@ export async function getAllQuestions(
 		const questions = await prisma.question.findMany();
 
 		if (!questions || questions.length === 0) {
-			return reply.code(401).send({
-				message: 'Sem questões para mostrar',
+			return reply.code(404).send({
+				message: 'Sem perguntas para mostrar',
 			});
 		}
 
@@ -70,7 +70,7 @@ export async function getQuestion(
 		});
 
 		if (!question) {
-			return reply.code(401).send({
+			return reply.code(400).send({
 				message: `Pergunta de id ${id} não existe`,
 			});
 		}
@@ -97,7 +97,7 @@ export async function patchQuestion(
 		});
 
 		if (!question) {
-			return reply.code(401).send({
+			return reply.code(400).send({
 				message: `Pergunta de id ${id} não existe`,
 			});
 		}
@@ -132,7 +132,7 @@ export async function deleteQuestion(
 		});
 
 		if (!question) {
-			return reply.code(401).send({
+			return reply.code(400).send({
 				message: `Pergunta de id ${id} não existe`,
 			});
 		}
@@ -140,7 +140,7 @@ export async function deleteQuestion(
 		const deleted = await prisma.question.delete({ where: { id: id } });
 		return reply
 			.code(200)
-			.send({ msg: `Pergunta de id ${deleted.id} deletada` });
+			.send({ message: `Pergunta de id ${deleted.id} deletada` });
 	} catch (e) {
 		return reply.code(500).send(e);
 	}

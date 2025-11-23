@@ -36,6 +36,6 @@ export const editTopicResponseSchema = z.object({
 export type EditTopicResponse = z.infer<typeof editTopicResponseSchema>;
 
 export const deleteTopicResponseSchema = z.object({
-	msg: z.string(),
+	message: z.string(),
 });
 export type DeleteTopicResponse = z.infer<typeof deleteTopicResponseSchema>;
