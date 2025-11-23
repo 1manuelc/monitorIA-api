@@ -84,5 +84,5 @@ app.listen({ port: 3000 }, (err, address) => {
 		process.exit(1);
 	}
 	console.log(`🤖 MonitorIA-API rodando em ${address}/api/`);
-	console.log(`📘 Swagger: ${address}/docs`);
+	console.log(`📘 Swagger docs: ${address}/docs`);
 });
