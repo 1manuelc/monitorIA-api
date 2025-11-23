@@ -5,7 +5,7 @@ import {
 	patchUserSchema,
 	userSchema,
 } from './schemas.js';
-import { getAllUsers, getUser, patchUser } from './controller.js';
+import { deleteUser, getAllUsers, getUser, patchUser } from './controller.js';
 import {
 	deleteMessageSchema,
 	requestErrorMessageSchema,
@@ -81,7 +81,7 @@ export async function userRoutes(app: FastifyInstance) {
 				},
 			},
 		},
-		patchUser,
+		deleteUser,
 	);
 
 	app.log.info('user routes registered');

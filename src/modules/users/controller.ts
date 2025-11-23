@@ -98,7 +98,7 @@ export async function deleteUser(
 			});
 		}
 
-		const deleted = await prisma.vote.delete({
+		const deleted = await prisma.app_user.delete({
 			where: { id },
 		});
 		return reply
