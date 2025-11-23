@@ -1,5 +1,18 @@
 import z from 'zod';
 
+export const questionSchema = z.object({
+	id: z.number(),
+	user_id: z.number(),
+	topic_id: z.number(),
+	title: z.string(),
+	body: z.string(),
+	created_at: z.date(),
+	updated_at: z.date(),
+	is_resolved: z.boolean(),
+});
+
+export const getAllQuestionsResponseSchema = z.array(questionSchema);
+
 export const createQuestionSchema = z.object({
 	user_id: z.number(),
 	topic_id: z.number(),

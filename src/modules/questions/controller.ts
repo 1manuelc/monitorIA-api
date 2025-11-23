@@ -70,7 +70,7 @@ export async function getQuestion(
 		});
 
 		if (!question) {
-			return reply.code(400).send({
+			return reply.code(404).send({
 				message: `Pergunta de id ${id} não existe`,
 			});
 		}
@@ -132,7 +132,7 @@ export async function deleteQuestion(
 		});
 
 		if (!question) {
-			return reply.code(400).send({
+			return reply.code(404).send({
 				message: `Pergunta de id ${id} não existe`,
 			});
 		}
