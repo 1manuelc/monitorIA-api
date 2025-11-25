@@ -19,6 +19,7 @@ import swagger from '@fastify/swagger';
 import swaggerUI from '@fastify/swagger-ui';
 import { jsonSchemaTransform } from 'fastify-type-provider-zod';
 import { authRoutes } from './modules/auth/routes.js';
+import { aiRoutes } from './modules/ai/routes.js';
 
 const app = Fastify({
 	logger: {
@@ -79,6 +80,7 @@ app.register(topicRoutes, { prefix: '/api/topics' });
 app.register(questionRoutes, { prefix: '/api/questions' });
 app.register(voteRoutes, { prefix: '/api/votes' });
 app.register(answerRoutes, { prefix: '/api/questions/:questionId/answers' });
+app.register(aiRoutes, { prefix: '/api/ai' });
 
 app.listen({ port: 3000 }, (err, address) => {
 	if (err) {
