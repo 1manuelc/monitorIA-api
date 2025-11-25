@@ -9,7 +9,7 @@
   <img src='https://img.shields.io/badge/PostgreSQL-336791?style=for-the-badge&logo=postgresql&logoColor=white' alt='PostgreSQL'>
 </div>
 
-Este projeto contém uma API robusta para a plataforma MonitorIA, fornecendo funcionalidades completas de gestão de usuários, autenticação, perguntas, respostas, tópicos e votação através de rotas bem definidas e documentadas.
+Este projeto contém uma API robusta para a plataforma MonitorIA, fornecendo funcionalidades completas de gestão de usuários, autenticação, perguntas, respostas, respostas automáticas geradas por IA, tópicos e votação através de rotas bem definidas e documentadas.
 
 ## 📋 Funcionalidades
 
