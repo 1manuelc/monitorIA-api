@@ -19,6 +19,7 @@ Este projeto contém uma API robusta para a plataforma MonitorIA, fornecendo fun
 -   **Perguntas**: Criação, leitura, atualização e exclusão de perguntas com filtro por tópicos.
 -   **Respostas**: Sistema completo de respostas com identificação de melhores respostas e sugestões de IA.
 -   **Votação**: Sistema de votos upvote/downvote para perguntas e respostas com rastreamento de usuário.
+-   **Inteligência Artificial**: Geração automática de sugestões de respostas para perguntas usando integração com Groq API.
 -   **Validação de Dados**: Validação robusta de requisições e esquemas de resposta com Zod.
 -   **Documentação Interativa**: Swagger/OpenAPI integrado com documentação automática de todas as rotas.
 -   **Tratamento de Erros**: Exibição aprimorada de erros com mensagens descritivas.
@@ -37,6 +38,7 @@ A API foi desenvolvida com `Node.js` e construída utilizando `TypeScript + Fast
 -   **`bcrypt`**: Hash seguro de senhas.
 -   **`dotenv`**: Gerenciamento de variáveis de ambiente.
 -   **`tsx`**: Executor de arquivos TypeScript para desenvolvimento.
+-   **Groq API**: Integração com IA para geração de sugestões de respostas baseadas em contexto.
 
 ## 🗄️ Estrutura do Banco de Dados
 
@@ -94,6 +96,10 @@ O projeto utiliza PostgreSQL com Prisma como ORM. As principais entidades são:
 -   `PATCH /:id` - Editar voto específico
 -   `DELETE /:id` - Deletar voto específico
 
+### Inteligência Artificial (`/api/ai`)
+
+-   `POST /suggest/:questionId` - Gera uma sugestão automática de resposta de IA para uma pergunta específica utilizando o contexto da pergunta e seu tópico
+
 ## 🚀 Executando Localmente
 
 Para executar a API, você precisa:
@@ -123,6 +129,7 @@ Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis:
 DATABASE_URL="postgresql://usuario:senha@localhost:5432/monitoria"
 JWT_SECRET="sua-chave-secreta-jwt"
 COOKIE_SECRET="sua-chave-secreta-cookie"
+GROQ_API_KEY="sua-chave-api-groq"
 LOGGER_LEVEL="info"
 ```
 
