@@ -3,10 +3,10 @@ import z from 'zod';
 export const answerSchema = z.object({
 	id: z.number(),
 	question_id: z.number(),
-	user_id: z.number(),
+	user_id: z.number().nullable(),
 	body: z.string(),
 	created_at: z.date(),
-	is_ai_suggestion: z.boolean(),
+	is_ai_suggestion: z.boolean().optional(),
 });
 
 export const getAllAnswersResponseSchema = z.array(answerSchema);
