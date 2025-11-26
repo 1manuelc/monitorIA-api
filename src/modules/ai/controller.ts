@@ -42,8 +42,6 @@ export async function suggestAIAnswer(
 			});
 		}
 
-		// TODO: procurar no banco de dados se já existe uma resposta de IA para a pergunta e barrar sugestão se já houver
-
 		const aiAnswerBody = await generateAIAnswer(
 			`${question.title}\n${question.body}`,
 			question.topic.name,
