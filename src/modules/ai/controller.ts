@@ -27,6 +27,23 @@ export async function suggestAIAnswer(
 			});
 		}
 
+		const aiAnswer = await prisma.answer.findFirst({
+			where: { question_id: questionId, is_ai_suggestion: true },
+			omit: {
+				updated_at: true,
+				is_best_answer: true,
+			},
+		});
+
+		if (aiAnswer) {
+			return reply.code(200).send({
+				message: 'Sugestão de resposta de IA preexistente recuperada.',
+				answer: aiAnswer,
+			});
+		}
+
+		// TODO: procurar no banco de dados se já existe uma resposta de IA para a pergunta e barrar sugestão se já houver
+
 		const aiAnswerBody = await generateAIAnswer(
 			`${question.title}\n${question.body}`,
 			question.topic.name,

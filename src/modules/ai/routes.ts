@@ -16,6 +16,7 @@ export async function aiRoutes(app: FastifyInstance) {
 					'Gera e salva uma sugestão de resposta de IA para uma pergunta específica.',
 				params: getQuestionByIdSchema,
 				response: {
+					200: aiSuggestionResponseSchema,
 					201: aiSuggestionResponseSchema,
 					400: aiSuggestionErrorSchema,
 					404: aiSuggestionErrorSchema,
