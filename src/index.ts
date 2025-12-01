@@ -20,6 +20,7 @@ import swaggerUI from '@fastify/swagger-ui';
 import { jsonSchemaTransform } from 'fastify-type-provider-zod';
 import { authRoutes } from './modules/auth/routes.js';
 import { aiRoutes } from './modules/ai/routes.js';
+import fastifyCors from '@fastify/cors';
 
 const app = Fastify({
 	logger: {
@@ -27,6 +28,14 @@ const app = Fastify({
 		enabled: !!process.env.LOGGER_LEVEL,
 	},
 }).withTypeProvider<ZodTypeProvider>();
+
+await app.register(fastifyCors, {
+	origin: ['http://localhost:5173'],
+	methods: ['GET', 'POST', 'PUT', 'DELETE'],
+	allowedHeaders: ['Content-Type', 'Authorization'],
+	exposedHeaders: ['Content-Type', 'Authorization'],
+	credentials: true,
+});
 
 app.register(swagger, {
 	openapi: {
