@@ -7,6 +7,13 @@ export const answerSchema = z.object({
 	body: z.string(),
 	created_at: z.date(),
 	is_ai_suggestion: z.boolean().optional(),
+	app_user: z
+		.object({
+			id: z.number(),
+			username: z.string(),
+		})
+		.nullable()
+		.optional(),
 });
 
 export const getAllAnswersResponseSchema = z.array(answerSchema);

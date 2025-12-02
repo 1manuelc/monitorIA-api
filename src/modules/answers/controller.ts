@@ -16,6 +16,14 @@ export async function getAllAnswers(
 	try {
 		const answersByQuestion = await prisma.answer.findMany({
 			where: { question_id: questionId },
+			include: {
+				app_user: {
+					select: {
+						id: true,
+						username: true,
+					},
+				},
+			},
 		});
 
 		if (!answersByQuestion || answersByQuestion.length === 0) {
@@ -39,6 +47,14 @@ export async function getAnswer(
 	try {
 		const answer = await prisma.answer.findUnique({
 			where: { question_id: questionId, id: answerId },
+			include: {
+				app_user: {
+					select: {
+						id: true,
+						username: true,
+					},
+				},
+			},
 		});
 
 		if (!answer) {
@@ -118,6 +134,14 @@ export async function patchAnswer(
 				updated_at: new Date(),
 			},
 			where: { question_id: questionId, id: answerId },
+			include: {
+				app_user: {
+					select: {
+						id: true,
+						username: true,
+					},
+				},
+			},
 		});
 
 		return reply.code(200).send(edited);
