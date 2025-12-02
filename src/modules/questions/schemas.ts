@@ -9,6 +9,14 @@ export const questionSchema = z.object({
 	created_at: z.date(),
 	updated_at: z.date(),
 	is_resolved: z.boolean(),
+	app_user: z.object({
+		id: z.number(),
+		username: z.string(),
+	}),
+	topic: z.object({
+		id: z.number(),
+		name: z.string(),
+	}),
 });
 
 export const getAllQuestionsResponseSchema = z.array(questionSchema);

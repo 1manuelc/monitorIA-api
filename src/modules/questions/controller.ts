@@ -44,7 +44,22 @@ export async function getAllQuestions(
 	reply: FastifyReply,
 ) {
 	try {
-		const questions = await prisma.question.findMany();
+		const questions = await prisma.question.findMany({
+			include: {
+				app_user: {
+					select: {
+						id: true,
+						username: true,
+					},
+				},
+				topic: {
+					select: {
+						id: true,
+						name: true,
+					},
+				},
+			},
+		});
 
 		if (!questions || questions.length === 0) {
 			return reply.code(404).send({
@@ -67,6 +82,20 @@ export async function getQuestion(
 	try {
 		const question = await prisma.question.findUnique({
 			where: { id: id },
+			include: {
+				app_user: {
+					select: {
+						id: true,
+						username: true,
+					},
+				},
+				topic: {
+					select: {
+						id: true,
+						name: true,
+					},
+				},
+			},
 		});
 
 		if (!question) {
@@ -111,6 +140,20 @@ export async function patchQuestion(
 				updated_at: new Date(),
 			},
 			where: { id: id },
+			include: {
+				app_user: {
+					select: {
+						id: true,
+						username: true,
+					},
+				},
+				topic: {
+					select: {
+						id: true,
+						name: true,
+					},
+				},
+			},
 		});
 		return reply.code(200).send(edited);
 	} catch (e) {
