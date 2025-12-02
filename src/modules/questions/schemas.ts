@@ -21,6 +21,13 @@ export const questionSchema = z.object({
 
 export const getAllQuestionsResponseSchema = z.array(questionSchema);
 
+export const searchQuestionByTitleSchema = z.object({
+	search: z.string().optional(),
+});
+export type SearchQuestionByTitleInput = z.infer<
+	typeof searchQuestionByTitleSchema
+>;
+
 export const createQuestionSchema = z.object({
 	user_id: z.number(),
 	topic_id: z.number(),

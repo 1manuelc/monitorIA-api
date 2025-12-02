@@ -13,6 +13,7 @@ import {
 	getQuestionByIdSchema,
 	patchQuestionSchema,
 	questionSchema,
+	searchQuestionByTitleSchema,
 } from './schemas.js';
 import {
 	deleteMessageSchema,
@@ -20,16 +21,15 @@ import {
 } from '../../utils/default-schemas.js';
 
 export async function questionRoutes(app: FastifyInstance) {
-	// TODO: implementar pesquisa por queryString ?search
 	app.get(
 		'/',
 		{
 			schema: {
 				tags: ['Perguntas'],
 				description: 'Obtém todas as perguntas',
+				querystring: searchQuestionByTitleSchema,
 				response: {
 					200: getAllQuestionsResponseSchema,
-					404: requestErrorMessageSchema,
 				},
 			},
 		},

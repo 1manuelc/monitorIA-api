@@ -4,6 +4,7 @@ import {
 	CreateQuestionInput,
 	GetQuestionByIdInput,
 	PatchQuestionInput,
+	SearchQuestionByTitleInput,
 } from './schemas.js';
 
 export async function createQuestion(
@@ -40,11 +41,12 @@ export async function createQuestion(
 }
 
 export async function getAllQuestions(
-	req: FastifyRequest,
+	req: FastifyRequest<{ Querystring: SearchQuestionByTitleInput }>,
 	reply: FastifyReply,
 ) {
+	const { search } = req.query;
 	try {
-		const questions = await prisma.question.findMany({
+		let questions = await prisma.question.findMany({
 			include: {
 				app_user: {
 					select: {
@@ -61,10 +63,10 @@ export async function getAllQuestions(
 			},
 		});
 
-		if (!questions || questions.length === 0) {
-			return reply.code(404).send({
-				message: 'Sem perguntas para mostrar',
-			});
+		if (search) {
+			questions = questions.filter((q) =>
+				q.title.toLowerCase().includes(search.toLowerCase()),
+			);
 		}
 
 		return reply.code(200).send(questions);
